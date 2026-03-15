@@ -1,0 +1,41 @@
+{% extends "main/base.html" %}
+
+{% block title %}Gastro COMPASS - гастротуры по Красноярску{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h1 class="text-center mb-5">Гастрономические туры по Красноярску</h1>
+        <div class="road-container">
+    </div>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for tour in tours %}
+        <div class="col">
+            <div class="card h-100">
+                {% if tour.photo %}
+                    <img src="{{ tour.photo.url }}" class="card-img-top" alt="{{ tour.name }}">
+                {% else %}
+                    <div class="card-img-top bg-secondary" style="height:200px;"></div>
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ tour.name }}</h5>
+                    <div class="rating">
+                        {% with avg=tour.average_rating %}
+                            {% if avg %}
+                                ★ {{ avg }} <span>({{ tour.review_count }} отзывов)</span>
+                            {% else %}
+                                ★ 0 <span>(нет отзывов)</span>
+                            {% endif %}
+                        {% endwith %}
+                    </div>
+                    <div class="location">{{ tour.location }}</div>
+                    <div class="price">{{ tour.price }} ₽</div>
+                    <a href="{% url 'tour_detail' tour.id %}" class="btn btn-primary">ЗАБРОНИРОВАТЬ</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+            <p class="text-center">Пока нет туров. Добавьте их через админку.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Gastro COMPASS{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        .star-rating {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+            gap: 0.25rem;
+        }
+        .star-rating input[type="radio"] {
+            display: none;
+        }
+        .star-rating label {
+            font-size: 2rem;
+            color: #ddd;
+            cursor: pointer;
+            transition: color 0.2s;
+            line-height: 1;
+        }
+        .star-rating label:hover,
+        .star-rating label:hover ~ label,
+        .star-rating input[type="radio"]:checked ~ label {
+            color: #f5b342;
+        }
+        .review-card {
+            margin-bottom: 0.5rem;
+        }
+        .review-card .card-body {
+            padding: 0.75rem;
+        }
+        .review-card .card-subtitle {
+            font-size: 0.85rem;
+        }
+        .review-card .card-text {
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+        .review-card small {
+            font-size: 0.75rem;
+        }
+        body {
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+        .logo-placeholder {
+            width: 40px;
+            height: 40px;
+            background-color: #6c757d;
+            border-radius: 8px;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .btn-outline-dark {
+            border-radius: 30px;
+            padding: 8px 25px;
+        }
+        .card {
+            border: none;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+        .card-body {
+            padding: 1.5rem;
+        }
+        .rating {
+            color: #f5b342;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .rating span {
+            color: #6c757d;
+            font-weight: normal;
+            margin-left: 5px;
+        }
+        .location {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        .price {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .btn-primary {
+            background-color: #333;
+            border: none;
+            border-radius: 30px;
+            padding: 10px 0;
+            font-weight: 600;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #555;
+        }
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            color: #6c757d;
+            padding: 20px 0;
+            background-color: white;
+        }
+        .background-road {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+        @media (max-width: 768px) {
+            .background-road {
+                opacity: 0.3;
+            }
+        }
+        .avatar-circle {
+            width: 48px;
+            height: 48px;
+            background-color: #6c757d;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        .rating-static .star {
+            font-size: 1.2rem;
+            color: #ddd;
+            margin-right: 2px;
+        }
+        .rating-static .star.filled {
+            color: #f5b342;
+        }
+        .review-card .card-body {
+            padding: 1rem;
+        }
+        .review-card .card-subtitle {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        .review-card .text-muted small {
+            font-size: 0.85rem;
+        }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <svg class="background-road" viewBox="0 0 1200 2000" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <linearGradient id="roadGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#ff8c42" stop-opacity="0.3" />
+                <stop offset="50%" stop-color="#ff5e00" stop-opacity="0.4" />
+                <stop offset="100%" stop-color="#ff8c42" stop-opacity="0.3" />
+            </linearGradient>
+        </defs>
+        <path d="M100,100 C200,200 300,50 400,150 C500,250 600,100 700,200 C800,300 900,150 1000,250 C1100,350 1000,450 900,400 C800,350 700,450 600,400 C500,350 400,450 300,400 C200,350 100,450 150,500 C200,550 300,600 400,550 C500,500 600,600 700,550 C800,500 900,600 1000,550 C1100,500 1150,600 1100,650 C1050,700 950,750 850,700 C750,650 650,750 550,700 C450,650 350,750 250,700 C150,650 50,750 100,800 C150,850 250,900 350,850 C450,800 550,900 650,850 C750,800 850,900 950,850 C1050,800 1150,900 1100,950 C1050,1000 950,1050 850,1000 C750,950 650,1050 550,1000 C450,950 350,1050 250,1000 C150,950 50,1050 100,1100 C150,1150 250,1200 350,1150 C450,1100 550,1200 650,1150 C750,1100 850,1200 950,1150 C1050,1100 1150,1200 1100,1250 C1050,1300 950,1350 850,1300 C750,1250 650,1350 550,1300 C450,1250 350,1350 250,1300 C150,1250 50,1350 100,1400"
+              stroke="url(#roadGradient)" stroke-width="30" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+        <path d="M100,100 C200,200 300,50 400,150 C500,250 600,100 700,200 C800,300 900,150 1000,250 C1100,350 1000,450 900,400 C800,350 700,450 600,400 C500,350 400,450 300,400 C200,350 100,450 150,500 C200,550 300,600 400,550 C500,500 600,600 700,550 C800,500 900,600 1000,550 C1100,500 1150,600 1100,650 C1050,700 950,750 850,700 C750,650 650,750 550,700 C450,650 350,750 250,700 C150,650 50,750 100,800 C150,850 250,900 350,850 C450,800 550,900 650,850 C750,800 850,900 950,850 C1050,800 1150,900 1100,950 C1050,1000 950,1050 850,1000 C750,950 650,1050 550,1000 C450,950 350,1050 250,1000 C150,950 50,1050 100,1100 C150,1150 250,1200 350,1150 C450,1100 550,1200 650,1150 C750,1100 850,1200 950,1150 C1050,1100 1150,1200 1100,1250 C1050,1300 950,1350 850,1300 C750,1250 650,1350 550,1300 C450,1250 350,1350 250,1300 C150,1250 50,1350 100,1400"
+              stroke="#ffffff" stroke-width="4" fill="none" stroke-dasharray="20 30" stroke-linecap="round" opacity="0.7" />
+    </svg>
+
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'tour_list' %}">
+                <span class="logo-placeholder"></span>
+                Gastro COMPASS
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'tour_list' %}">Главная</a>
+                    </li>
+                    {% if user.is_authenticated %}
+    <li class="nav-item d-flex align-items-center">
+        <div class="avatar-circle me-2" style="width: 32px; height: 32px; font-size: 1rem;">
+            <span>{{ user.username|first|upper }}</span>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'logout' %}">Выйти</a>
+    </li>
+{% else %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'login' %}">Вход</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'register' %}">Регистрация</a>
+    </li>
+{% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© 2026 Gastro COMPASS. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="bookingModalLabel">Бронирование тура</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="bookingForm" method="post" action="{% url 'booking' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="tour_id" id="bookingTourId">
+                        <div class="mb-3">
+                            <label for="{{ booking_form.name.id_for_label }}" class="form-label">Имя</label>
+                            {{ booking_form.name }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{ booking_form.phone.id_for_label }}" class="form-label">Телефон</label>
+                            {{ booking_form.phone }}
+                        </div>
+                        <div class="mb-3">
+                             <label for="{{ booking_form.email.id_for_label }}" class="form-label">Email</label>
+                            {{ booking_form.email }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{ booking_form.date.id_for_label }}" class="form-label">Желаемая дата</label>
+                            {{ booking_form.date }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{ booking_form.guests.id_for_label }}" class="form-label">Количество гостей</label>
+                            {{ booking_form.guests }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{ booking_form.comment.id_for_label }}" class="form-label">Комментарий</label>
+                            {{ booking_form.comment }}
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="submit" form="bookingForm" class="btn btn-primary">Отправить заявку</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.star-rating').forEach(function(container) {
+                const radios = container.querySelectorAll('input[type="radio"]');
+                radios.forEach(function(radio) {
+                    const label = document.createElement('label');
+                    label.htmlFor = radio.id;
+                    label.innerHTML = '★';
+                    radio.parentNode.insertBefore(label, radio.nextSibling);
+                });
+            });
+            const userEmail = '{{ user.email|escapejs }}';
+            if (userEmail) {
+            const emailField = document.getElementById('id_email');
+            if (emailField) emailField.value = userEmail;
+            }
+            const userName = '{{ user_name|escapejs }}';
+            const userPhone = '{{ user_phone|escapejs }}';
+            if (userName) {
+                const nameField = document.getElementById('id_name');
+                if (nameField) nameField.value = userName;
+            }
+            if (userPhone) {
+                const phoneField = document.getElementById('id_phone');
+                if (phoneField) phoneField.value = userPhone;
+            }
+
+            const bookingButtons = document.querySelectorAll('.booking-btn');
+            bookingButtons.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const tourId = this.dataset.tourId;
+                    const tourName = this.dataset.tourName;
+                    document.getElementById('bookingTourId').value = tourId;
+                    document.getElementById('bookingModalLabel').textContent = `Бронирование: ${tourName}`;
+                    const modal = new bootstrap.Modal(document.getElementById('bookingModal'));
+                    modal.show();
+                });
+            });
+        });
+    </script>
+</body>
+</html>

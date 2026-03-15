@@ -1,0 +1,50 @@
+{% extends "main/base.html" %}
+
+{% block title %}Gastro COMPASS - гастротуры по Красноярску{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-5">Гастрономические туры по Красноярску</h1>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for tour in tours %}
+        <div class="col">
+            <div class="card h-100">
+                <!-- Фото кликабельно -> страница тура -->
+                <a href="{% url 'tour_detail' tour.id %}">
+                    {% if tour.photo %}
+                        <img src="{{ tour.photo.url }}" class="card-img-top" alt="{{ tour.name }}" style="height: 200px; object-fit: cover;">
+                    {% else %}
+                        <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height:200px;">
+                            <span class="text-white">Нет фото</span>
+                        </div>
+                    {% endif %}
+                </a>
+                <div class="card-body">
+                    <!-- Название кликабельно -> страница тура -->
+                    <h5 class="card-title">
+                        <a href="{% url 'tour_detail' tour.id %}" class="text-decoration-none text-dark">{{ tour.name }}</a>
+                    </h5>
+                    <div class="rating">
+                        {% with avg=tour.average_rating %}
+                            {% if avg %}
+                                ★ {{ avg }} <span>({{ tour.review_count }} отзывов)</span>
+                            {% else %}
+                                ★ 0 <span>(нет отзывов)</span>
+                            {% endif %}
+                        {% endwith %}
+                    </div>
+                    <div class="location">{{ tour.location }}</div>
+                    <div class="price">{{ tour.price }} ₽</div>
+                    <!-- Кнопка бронирования открывает модалку -->
+                    <button class="btn btn-primary booking-btn w-100" data-tour-id="{{ tour.id }}" data-tour-name="{{ tour.name }}">
+                        ЗАБРОНИРОВАТЬ
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+            <p class="text-center">Пока нет туров. Добавьте их через админку.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
